@@ -8,7 +8,7 @@ The simplest usage (which requires tmux on the server) is:
 
 Once the connection is established, it is persistent. You can turn close your laptop and put it to sleep, restart your wifi connection,
 or put your laptop in your backpack and go home for the day. When you open it back up, the connection will be automatically reestablished.
-Sshmux is a simple bash wrapper around ssh. It is platform independent, works with all other ssh command line arguments, and requires no configuration. Without the `-s` argument, sshmux behaves identically to ssh.
+Sshmux is a simple bash wrapper around ssh. It is platform independent, works with all other ssh command line arguments, and requires no configuration. Without the `-s` argument, sshmux behaves identically to ssh, letting you alias ssh=sshmux without any problems.
 
 <h2>Installation</h2>
 
