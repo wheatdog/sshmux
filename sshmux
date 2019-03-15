@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+readonly SSHMUX_SSHCOMMAND=${SSHMUX_SSHCOMMAND:-ssh}
+
 trap "exit 1" SIGTSTP
 
 read_tmux_session_name() {
@@ -43,18 +45,18 @@ SSHMUX_ARGS=""
 TMUX_PATH=""
 read_tmux_session_name "$@"
 if [ ! -z $TMUX_LS ]; then
-    ssh $SSHMUX_ARGS -t "export PATH=\$PATH:${TMUX_PATH}; tmux ls"
+    $SSHMUX_SSHCOMMAND $SSHMUX_ARGS -t "export PATH=\$PATH:${TMUX_PATH}; tmux ls"
     exit 1
 fi
 if [ -z $T_ARG ]; then
-    ssh "$@"
+    $SSHMUX_SSHCOMMAND "$@"
     exit 1
 fi
 
 RETRY_IN=1
 INIT_TIME=`date +%s`
 LAST_FAIL_TIME=$INIT_TIME
-while ! ssh $SSHMUX_ARGS -o ConnectTimeout=0 -o ServerAliveInterval=5 -o ServerAliveCountmax=2 -t "export PATH=\$PATH:$TMUX_PATH; tmux -2 attach -t '=$T_ARG' || tmux -2 new -s $T_ARG" 2>/tmp/.sshmux_log
+while ! $SSHMUX_SSHCOMMAND $SSHMUX_ARGS -o ConnectTimeout=0 -o ServerAliveInterval=5 -o ServerAliveCountmax=2 -t "export PATH=\$PATH:$TMUX_PATH; tmux -2 attach -t '=$T_ARG' || tmux -2 new -s $T_ARG" 2>/tmp/.sshmux_log
 do
     CURRENT_TIME=`date +%s`
     if [ $CURRENT_TIME -lt $(($INIT_TIME + 10)) ]; then
