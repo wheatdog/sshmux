@@ -70,10 +70,7 @@ do
         RETRY_IN=1
     fi
 
-
-    python -c 'import datetime; import sys; sys.stdout.write(
-        "\033[94m%s: Connection lost: retrying in %d seconds (Press enter to try again now)\033[0m\r" % 
-            (datetime.datetime.now().strftime("%H:%M.%S"), '$RETRY_IN'))'
+    printf "\033[94m%s: Connection lost: retrying in %d seconds (Press enter to try again now)\033[0m\r" "$(date +%H:%M:%S)" "$RETRY_IN"
     if [ $SSHMUX_VERBOSE ]; then
         echo ''
         cat /tmp/.sshmux_log
